@@ -8,4 +8,5 @@ import com.trabalho.crud.core.repository.UserRepository;
 
 @Profile("!test")
 public interface JpaUserRepository extends UserRepository, JpaRepository<User, Long> {
+
 }

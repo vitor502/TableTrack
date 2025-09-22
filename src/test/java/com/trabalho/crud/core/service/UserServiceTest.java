@@ -17,25 +17,26 @@ import com.trabalho.crud.core.repository.UserRepository;
 @SpringBootTest
 class UserServiceTest {
 
-  @Autowired
-  private UserRepository repository;
+	@Autowired
+	private UserRepository repository;
 
-  @Autowired
-  private UserService service;
+	@Autowired
+	private UserService service;
 
-  @BeforeEach
-  void populateRepository() {
-    MockitoAnnotations.openMocks(this);
-    repository.save(User.builder().name("User 1").email("email1@email.com").build());
-    repository.save(User.builder().name("User 2").email("email2@email.com").build());
-    repository.save(User.builder().name("User 3").email("email3@email.com").build());
-  }
+	@BeforeEach
+	void populateRepository() {
+		MockitoAnnotations.openMocks(this);
+		repository.save(User.builder().name("User 1").email("email1@email.com").build());
+		repository.save(User.builder().name("User 2").email("email2@email.com").build());
+		repository.save(User.builder().name("User 3").email("email3@email.com").build());
+	}
 
-  @Test
-  @DisplayName("Busca todos os usuários")
-  void testBuscarTodosOsUsuarios() {
-    var allUsers = service.findAll();
+	@Test
+	@DisplayName("Busca todos os usuários")
+	void testBuscarTodosOsUsuarios() {
+		var allUsers = service.findAll();
 
-    assertEquals(3, allUsers.size());
-  }
+		assertEquals(3, allUsers.size());
+	}
+
 }

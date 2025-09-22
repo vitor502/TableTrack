@@ -8,8 +8,8 @@ import com.trabalho.crud.core.entity.User;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-  User toEntity(UserDto dto);
+	User toEntity(UserDto dto);
 
-  UserDto toDto(User entity);
-  
+	UserDto toDto(User entity);
+
 }
