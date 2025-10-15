@@ -1,140 +1,264 @@
-# Projeto {Sistema de Gerenciamento de Restaurante} - Backend (trabalho-api)
+# 🍽️ Projeto-Sistema-Restaurante - Backend
 
-## Descrição
-Projeto com intuito de desenvolver um sistema que trate dos processos gerernciais.  
+## 📋 Descrição
 
-## Tecnologias Utilizadas
+O **Projeto-Sistema-Restaurante** é uma aplicação backend desenvolvida em **Java 17 com Spring Boot**, projetada para gerenciar os processos internos de um restaurante.  
+O sistema contempla módulos de **cadastro de produtos, controle de pedidos, gerenciamento de clientes, funcionários, mesas e autenticação de usuários**.  
 
-- Java {versão}
-- {outras tecnologias utilizadas}
+O objetivo é oferecer uma API RESTful organizada, segura e escalável, pronta para integração com um **frontend web** ou **aplicativo mobile**.
 
-## Pré-requisitos
+---
 
-- JDK {versão}
-- {outros pré-requisitos}
+## ⚙️ Tecnologias Utilizadas
 
-## Instalação
+- **Java 17**
+- **Spring Boot 3.x**
+- **Spring Web**
+- **Spring Data JPA**
+- **Spring Security (JWT)**
+- **MySQL**
+- **Lombok**
+- **Maven**
+- **Swagger / SpringDoc OpenAPI**
+
+---
+
+## 🧱 Pré-requisitos
+
+Antes de iniciar, você precisará ter instalado:
+
+- **JDK 17+**
+- **Maven 3.8+**
+- **MySQL 8+**
+- **Git**
+
+---
+
+## 🚀 Instalação e Execução
 
 1. **Clone o repositório:**
-
    ```bash
-   git clone https://link-do-repo.git
+   git clone https://github.com/seu-usuario/Projeto-Sistema-Restaurante.git
    ```
 
-2. **Navegue até o diretório do projeto:**
-
+2. **Acesse o diretório do projeto:**
    ```bash
-   cd diretorio-do-projeto
+   cd Projeto-Sistema-Restaurante
    ```
 
 3. **Configure o banco de dados:**
+   Edite o arquivo `src/main/resources/application.yaml` com as configurações do seu MySQL:
+   ```yaml
+   spring:
+     datasource:
+       url: jdbc:mysql://localhost:3306/restaurante_db
+       username: root
+       password: sua_senha
+       driver-class-name: com.mysql.cj.jdbc.Driver
 
-   Edite o arquivo [application.yaml](src/main/resources/application.yaml) com as configurações do seu banco de dados.
+     jpa:
+       hibernate:
+         ddl-auto: update
+       show-sql: true
+
+     jackson:
+       serialization:
+         INDENT_OUTPUT: true
+
+   jwt:
+     secret: minha_chave_super_secreta
+     expiration: 86400000 # 1 dia
+   ```
 
 4. **Compile e execute o projeto:**
-
    ```bash
    mvn clean install
    mvn spring-boot:run
    ```
 
-   A API estará disponível em `http://localhost:8080`.
+5. **Acesse a API:**
+   ```
+   http://localhost:8080
+   ```
 
-## Documentação da API (Swagger)
+---
 
-A documentação da API pode ser acessada por meio do Swagger. Após iniciar o backend, você pode acessar a documentação por meio da seguinte URL:
+## 📖 Documentação da API (Swagger)
 
-[/swagger-ui/index.html](http://localhost:8080//swagger-ui/index.html)
+Após iniciar o backend, acesse a documentação gerada automaticamente pelo Swagger em:  
+👉 [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
-## Endpoints
+---
 
-Abaixo está a descrição dos principais endpoints da API:
+## 🔐 Autenticação
 
-{Alterar os endpoints conforme os endpoints do projeto}
+O sistema utiliza **JWT (JSON Web Token)** para autenticação e autorização.  
+Fluxo básico:
 
-### **1. GET /api/usuarios**
+1. O usuário realiza login em `/api/auth/login` enviando **email e senha**.  
+2. Se válido, o sistema retorna um **token JWT**.  
+3. O token deve ser enviado no cabeçalho `Authorization` em todas as requisições protegidas:  
+   ```
+   Authorization: Bearer seu_token_jwt
+   ```
 
-- **Descrição:** Retorna uma lista de usuários.
-- **Parâmetros de Consulta:**
-  - `page` (opcional): Número da página.
-  - `size` (opcional): Número de itens por página.
+---
+
+## 🔗 Endpoints Principais
+
+### **1. POST /api/auth/login**
+
+- **Descrição:** Realiza o login e retorna o token JWT.
+- **Corpo da Requisição:**
+  ```json
+  {
+    "email": "admin@restaurante.com",
+    "senha": "123456"
+  }
+  ```
 - **Resposta:**
-  - **200 OK**
-    ```json
-    [
-      {
-        "id": 1,
-        "nome": "João",
-        "email": "joao@exemplo.com"
-      },
-      // ...
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+  ```
+
+---
+
+### **2. GET /api/produtos**
+
+- **Descrição:** Retorna todos os produtos cadastrados.
+- **Resposta:**
+  ```json
+  [
+    {
+      "id": 1,
+      "nome": "Pizza Calabresa",
+      "preco": 45.90,
+      "categoria": "Pizzas"
+    }
+  ]
+  ```
+
+---
+
+### **3. POST /api/pedidos**
+
+- **Descrição:** Cria um novo pedido para uma mesa ou cliente.
+- **Corpo da Requisição:**
+  ```json
+  {
+    "clienteId": 1,
+    "mesa": 5,
+    "itens": [
+      { "produtoId": 1, "quantidade": 2 },
+      { "produtoId": 3, "quantidade": 1 }
     ]
-    ```
-
-### **2. POST /api/usuarios**
-
-- **Descrição:** Cria um novo usuário.
-- **Corpo da Requisição:**
-  ```json
-  {
-    "nome": "Maria",
-    "email": "maria@exemplo.com"
   }
   ```
 - **Resposta:**
-  - **201 Created**
-    ```json
-    {
-      "id": 2,
-      "nome": "Maria",
-      "email": "maria@exemplo.com"
-    }
-    ```
+  ```json
+  {
+    "id": 10,
+    "status": "RECEBIDO",
+    "valorTotal": 92.80
+  }
+  ```
 
-### **3. GET /api/usuarios/{id}**
+---
 
-- **Descrição:** Retorna um usuário específico pelo ID.
-- **Parâmetros de Caminho:**
-  - `id`: ID do usuário.
+### **4. PUT /api/pedidos/{id}/status**
+
+- **Descrição:** Atualiza o status de um pedido.
+- **Corpo da Requisição:**
+  ```json
+  { "status": "ENTREGUE" }
+  ```
 - **Resposta:**
-  - **200 OK**
-    ```json
+  ```json
+  {
+    "id": 10,
+    "status": "ENTREGUE"
+  }
+  ```
+
+---
+
+### **5. GET /api/clientes**
+
+- **Descrição:** Retorna todos os clientes cadastrados.
+- **Resposta:**
+  ```json
+  [
     {
       "id": 1,
-      "nome": "João",
-      "email": "joao@exemplo.com"
+      "nome": "Carlos Mendes",
+      "telefone": "(11) 99999-9999"
     }
-    ```
-  - **404 Not Found** (se o usuário não for encontrado)
+  ]
+  ```
 
-### **4. PUT /api/usuarios/{id}**
+---
 
-- **Descrição:** Atualiza um usuário existente.
+### **6. POST /api/funcionarios**
+
+- **Descrição:** Cadastra um novo funcionário.
 - **Corpo da Requisição:**
   ```json
   {
-    "nome": "João Atualizado",
-    "email": "joaoatualizado@exemplo.com"
+    "nome": "Fernanda Lima",
+    "cargo": "Atendente",
+    "salario": 2300.00
   }
   ```
-- **Parâmetros de Caminho:**
-  - `id`: ID do usuário.
 - **Resposta:**
-  - **200 OK**
-    ```json
-    {
-      "id": 1,
-      "nome": "João Atualizado",
-      "email": "joaoatualizado@exemplo.com"
-    }
-    ```
-  - **404 Not Found** (se o usuário não for encontrado)
+  ```json
+  {
+    "id": 4,
+    "nome": "Fernanda Lima",
+    "cargo": "Atendente"
+  }
+  ```
 
-### **5. DELETE /api/usuarios/{id}**
+---
 
-- **Descrição:** Remove um usuário pelo ID.
-- **Parâmetros de Caminho:**
-  - `id`: ID do usuário.
-- **Resposta:**
-  - **204 No Content**
-  - **404 Not Found** (se o usuário não for encontrado)
+## 🗂️ Estrutura de Pacotes (Sugerida)
+
+```
+src/
+ └── main/
+     ├── java/com/restaurante/backend/
+     │   ├── controller/
+     │   ├── model/
+     │   ├── repository/
+     │   ├── service/
+     │   ├── config/
+     │   ├── security/
+     │   └── dto/
+     └── resources/
+         ├── application.yaml
+         └── data.sql
+```
+
+---
+
+## 🧩 Futuras Implementações
+
+- [ ] Controle de estoque em tempo real  
+- [ ] Relatórios gerenciais (vendas diárias, produtos mais vendidos, etc.)  
+- [ ] Integração com sistema de entregas  
+- [ ] Painel administrativo com dashboards  
+- [ ] Módulo de reservas de mesas  
+
+---
+
+## 👨‍💻 Equipe de Desenvolvimento
+
+- **Cesar [Seu Sobrenome]** — Desenvolvedor Backend  
+
+---
+
+## 📜 Licença
+
+Este projeto é distribuído sob a licença **MIT**.  
+Veja o arquivo `LICENSE` para mais detalhes.
