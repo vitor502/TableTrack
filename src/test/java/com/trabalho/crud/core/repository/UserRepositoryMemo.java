@@ -7,26 +7,27 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.trabalho.crud.core.entity.User;
+import com.trabalho.Restaurante.core.entity.Funcionario;
+import com.trabalho.Restaurante.core.repository.UserRepository;
 
 @ActiveProfiles("test")
 @Repository
 public class UserRepositoryMemo implements UserRepository {
 
-	private final List<User> users = new ArrayList<User>();
+	private final List<Funcionario> users = new ArrayList<Funcionario>();
 
 	@Override
-	public List<User> findAll() {
+	public List<Funcionario> findAll() {
 		return users;
 	}
 
 	@Override
-	public Optional<User> findById(Long id) {
+	public Optional<Funcionario> findById(Long id) {
 		return users.stream().filter(user -> user.getId().equals(id)).findFirst();
 	}
 
 	@Override
-	public User save(User user) {
+	public Funcionario save(Funcionario user) {
 		var id = users.size() + 1;
 		user.setId((long) id);
 		users.add(user);
